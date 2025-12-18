@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console: Research Site №1</title>
+    <style>
+        body {
+            background-color: black;
+            color: lime;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            margin: 0;
+            overflow: hidden;
+        }
+        #console {
+            border: 1px solid lime;
+            padding: 15px;
+            min-height: 70vh;
+            background-color: #0a0a0a;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .log {
+            margin-bottom: 8px;
+            white-space: nowrap;
+        }
+        .error { color: red; }
+        .warning { color: yellow; }
+        .cursor {
+            display: inline-block;
+            background-color: lime;
+            width: 10px;
+            height: 1.2em;
+            animation: blink 1s infinite;
+            margin-left: 4px;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        #playButton {
+            background-color: #000;
+            color: lime;
+            border: 1px solid lime;
+            padding: 10px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+        #playButton:hover {
+            background-color: lime;
+            color: black;
+        }
+        #playButton:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; margin-bottom: 20px;">system console // arcticresearchdomain</h1>
+    <div id="console"></div>
+
+    <!-- Кнопка для проигрывания звука -->
+    <button id="playButton">Анализ от ИИ-спутника </button>
+
+    <!-- Скрытый аудиоплеер -->
+    <audio id="systemSound" src="AIPREDICT.mp3"></audio> <!-- Измени имя файла на своё -->
+
+    <script>
+        const logs = [
+            { date: '2025-12-18 09:00:00', message: 'Система инициализирована. Температура окружающей среды: +35°C.', type: 'info' },
+            { date: '2025-12-18 10:05:12', message: 'ВНИМАНИЕ: Аномальное повышение УФ-излучения (+28%).', type: 'warning' },
+            { date: '2025-12-18 11:17:45', message: 'КРИТИЧЕСКАЯ ОШИБКА: Перегрев реактора №5. Температура превысила критический порог.', type: 'error' },
+            { date: '2025-12-18 11:45:03', message: 'Получен зашифрованный сигнал: 78 101 112 103 118 112 67 101 98 122...', type: 'info' },
+            { date: '2025-12-18 12:30:22', message: 'ВНИМАНИЕ: Сбой в расчётах моделирования климата. Ошибка в коэффициенте отражения.', type: 'warning' },
+            { date: '2025-12-18 13:11:59', message: 'КРИТИЧЕСКАЯ ОШИБКА: Цепная реакция в реакторе запущена. Результаты: глобальный тепловой всплеск.', type: 'error' },
+            { date: '2025-12-18 15:47:38', message: 'КРИТИЧЕСКАЯ ОШИБКА: Сбой охлаждения. Результаты расчёта: перегрев на +150°C за 24 часа.', type: 'error' },
+            { date: '2025-12-18 16:20:04', message: 'Последнее сообщение от оператора: "Солнце стало врагом".', type: 'info' },
+            { date: '2025-12-18 17:55:51', message: 'ПРОИСХОДИТ СЦЕНАРИЙ: "Разум угасает первым" Полный коллапс неизбежен.', type: 'error' },
+            { date: '2025-12-18 18:59:59', message: 'Система переходит в режим ожидания.', type: 'info' }
+        ];
+
+        const consoleDiv = document.getElementById('console');
+        const audio = document.getElementById('systemSound');
+        const button = document.getElementById('playButton');
+
+        let delay = 1000;
+
+        function typeText(element, text, callback) {
+            let i = 0;
+            const speed = 25;
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    callback();
+                }
+            }
+            type();
+        }
+
+        logs.forEach((log, index) => {
+            setTimeout(() => {
+                const logEntry = document.createElement('div');
+                logEntry.classList.add('log');
+                if (log.type === 'error') logEntry.classList.add('error');
+                if (log.type === 'warning') logEntry.classList.add('warning');
+
+                const fullText = `[${log.date}] ${log.message}`;
+                logEntry.textContent = '';
+
+                consoleDiv.appendChild(logEntry);
+
+                typeText(logEntry, fullText, () => {
+                    if (index === logs.length - 1) {
+                        const cursor = document.createElement('span');
+                        cursor.classList.add('cursor');
+                        consoleDiv.appendChild(cursor);
+                    }
+                });
+            }, delay);
+
+            delay += logs[index].message.length * 50 + Math.random() * 1500 + 800;
+        });
+
+        // Обработчик кнопки
+        button.addEventListener('click', () => {
+            button.textContent = 'PLAYING...';
+            audio.currentTime = 0; // Перезапустить, если уже играл
+            audio.play();
+
+            audio.onended = () => {
+                button.textContent = 'Анализ от ИИ-спутника';
+            };
+
+            // Если браузер блокирует автоплей — после первого клика разблокируется
+        });
+    </script>
+</body>
+</html>
