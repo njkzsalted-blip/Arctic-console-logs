@@ -88,11 +88,11 @@
         const audio = document.getElementById('systemSound');
         const button = document.getElementById('playButton');
 
-        let delay = 250;
+        let delay = 100;
 
         function typeText(element, text, callback) {
             let i = 0;
-            const speed = 38;
+            const speed = 60;
             function type() {
                 if (i < text.length) {
                     element.textContent += text.charAt(i);
@@ -145,4 +145,5 @@
 </body>
 
 </html>
+
 
